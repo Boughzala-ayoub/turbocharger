@@ -2317,6 +2317,7 @@ fn windows_launcher_tags_and_user_sites() {
             .env("ProgramFiles", r.join("empty_pf"))
             .env("ProgramFiles(x86)", r.join("empty_pf86"))
             .env("SystemDrive", r.join("empty_sd"))
+            .env("TC_NO_WIN_REGISTRY", "1")
             .env_remove("PYTHONNOUSERSITE")
             .env_remove("PYTHONUSERBASE")
             .env(env_k, env_v)

@@ -966,8 +966,10 @@ fn find_system_python(start: &Path) -> Option<(PathBuf, String, Option<PathBuf>,
             });
         };
         // 1. Registered PEP 514 installs (finds C:\Python311 and any custom install/exe path).
-        for (tag, dir, exe_path, arch) in win_pep514_installs() {
-            add(Some(&tag), dir, exe_path, arch);
+        if std::env::var_os("TC_NO_WIN_REGISTRY").is_none() {
+            for (tag, dir, exe_path, arch) in win_pep514_installs() {
+                add(Some(&tag), dir, exe_path, arch);
+            }
         }
         // 2. Standard filesystem install roots (handles shared dirs with both standard & `t` builds).
         let mut roots: Vec<PathBuf> = Vec::new();
