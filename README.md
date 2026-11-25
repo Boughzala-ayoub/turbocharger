@@ -1,9 +1,15 @@
 # Turbocharger (`tc`)
 
-`tc` is a Rust CLI and stdio MCP server for AI coding agents. It answers two questions without an LLM or a network call. Package lookups only read files and never execute package code. The one exception to "nothing runs" is the CLI-only `tc dep --bin <cmd>`, which runs `<cmd> --help`.
+[![CI](https://github.com/Boughzala-ayoub/turbocharger/actions/workflows/ci.yml/badge.svg)](https://github.com/Boughzala-ayoub/turbocharger/actions/workflows/ci.yml)
 
-1. What does this code look like at the zoom level I need? `tc zoom` gives a repo map, a directory's public API, a file's symbol table, or one symbol's body with its callees, the installed dependencies it uses, and its callers.
-2. What does the installed version of this dependency actually export? `tc dep` reads `node_modules`, the Python venv and the Cargo registry on disk and prints exact signatures and docs. When a symbol doesn't exist in that version, it says so and suggests the real name.
+Offline Rust CLI and stdio MCP server giving AI coding agents **multi-level Tree-sitter AST code-zoom** and **exact installed dependency signatures** (Node `node_modules`, Python venvs, Cargo registry) — with zero LLM calls, zero network access, and zero package execution.
+
+<p align="center">
+  <img src="docs/demo.webp" alt="Turbocharger tc CLI walkthrough: repo overview L0, directory public API L1, symbol zoom L2 with callers/callees, and token-savings stats" width="880" />
+</p>
+
+1. **What does this code look like at the zoom level I need?** `tc zoom` gives a repo map (`L0`), a directory's public API (`L1`), a file's symbol table (`L1.5`), or one symbol's body with its callees, installed dependencies used, and callers (`L2`).
+2. **What does the installed version of this dependency actually export?** `tc dep` reads `node_modules`, Python venvs, and the Cargo registry directly from disk and prints exact signatures and docs — suggesting the real symbol name when an API was renamed. *(The CLI-only `tc dep --bin <cmd>` flag is the sole subcommand that executes a local binary with `--help`.)*
 
 Every call is logged locally with the tokens it printed and an estimate of the tokens in the files the agent didn't have to read, so `tc stats` can show the saving.
 
@@ -12,6 +18,8 @@ Languages: TypeScript/JavaScript (`.ts .tsx .js .jsx .mjs .cjs .d.ts`), Python (
 ## Install
 
 ```sh
+cargo install --git https://github.com/Boughzala-ayoub/turbocharger
+# or from a local clone:
 cargo install --path .        # puts `tc` on PATH
 tc init                       # optional: wire it into AGENTS.md / CLAUDE.md / .mcp.json
 ```
